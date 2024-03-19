@@ -24,7 +24,7 @@ export const useImageStore = defineStore("images", {
     },
     actions: {
         async $init() {
-            await this.restoreCartState();
+            await this.fetchImages();
         },
         // Fetch Images function gets called before the HomeView is created.
         async fetchImages() {

@@ -5,6 +5,7 @@
 import ProductsComponent from "@/components/Home/ProductsComponent.vue";
 import SearchComponent from "@/components/Home/SearchComponent.vue";
 import axios from "axios";
+import { useImageStore } from "@/stores/images";
 export default {
     // Products to display on the home view are stored here
     data() {
