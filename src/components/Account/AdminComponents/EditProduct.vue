@@ -129,13 +129,18 @@ export default {
                     // Send the new image to the server
                     await axios
                         .post("/api/edit-images", formData)
-                        .then(() => {
+                        .then(async () => {
                             // Define the local instance of image store
                             const imageStore = useImageStore();
-                            // Update the images in the image store
-                            imageStore.fetchImages();
-                            // Refresh the page
-                            router.go();
+                            
+                            // Reset the image state, then fetch images, then refresh the page.
+                            await imageStore.resetImageState().then(async () => {
+                                // Update the images in the image store
+                                await imageStore.fetchImages().then(() => {
+                                    // Refresh the page
+                                    router.go();
+                                });
+                            });
                         })
                         .catch((error) => {
                             console.error(error);
@@ -156,9 +161,17 @@ export default {
             this.isUpdatingProduct = true;
             await axios
                 .post("/api/edit-product", productChanges)
-                .then(() => {
-                    // Refresh the page
-                    router.go();
+                .then(async () => {
+                    // Define the local instance of image store
+                    const imageStore = useImageStore();
+                    // Reset the image state, then fetch images, then refresh the page.
+                    await imageStore.resetImageState().then(async () => {
+                        // Update the images in the image store
+                        await imageStore.fetchImages().then(() => {
+                            // Refresh the page
+                            router.go();
+                        });
+                    });
                 })
                 .catch((error) => {
                     // If the error is 409 then it's a duplicate product

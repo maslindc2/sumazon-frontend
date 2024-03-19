@@ -4,17 +4,12 @@
 import axios from "axios";
 import { defineStore } from "pinia";
 
-// Here we use vueuse/core's useStorage for persisting the pinia state for images.
-// This works exactly like localStorage, I couldn't get images to persist with localStorage so we are using this.
-// Same goes for the user store, I tried to use useStorage but it wouldn't persist user info ¯\_(ツ)_/¯
-import { useStorage } from "@vueuse/core";
-
 // Definining the Pinia store called images
 export const useImageStore = defineStore("images", {
     // Define the inital state
     state: () => ({
         // Set the key for the useStorage and the default value an empty array
-        images: useStorage("images", []),
+        images: []
     }),
     getters: {
         // Used for getting the image array from Pinia
@@ -23,6 +18,14 @@ export const useImageStore = defineStore("images", {
         },
     },
     actions: {
+        saveImageState(){
+            localStorage.setItem(
+                "images", 
+                JSON.stringify({
+                    images: this.images
+                })
+            );
+        },
         // Fetch Images function gets called before the HomeView is created.
         async fetchImages() {
             await axios
@@ -35,5 +38,9 @@ export const useImageStore = defineStore("images", {
                     console.error(error);
                 });
         },
+        async resetImageState() {
+            this.images = [];
+            this.saveImageState();
+        }
     },
 });
