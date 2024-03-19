@@ -1,7 +1,6 @@
 import { createApp, watch } from "vue";
 import App from "./App.vue";
 import { createPinia } from "pinia";
-import { useImageStore } from "./stores/images";
 import router from "./router";
 import "./index.css";
 import { useShoppingCartStore } from "./stores/shoppingCart";
@@ -14,9 +13,6 @@ const app = createApp(App);
 app.use(router);
 // Use Pinia State management
 app.use(pinia);
-
-const imageStore = useImageStore();
-imageStore.fetchImages();
 // Define the shopping cart store used for storing items in the cart
 const shoppingCart = useShoppingCartStore();
 // Restore the shopping cart if there is an instance in localstorage

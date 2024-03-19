@@ -19,8 +19,16 @@ export default {
     async beforeMount() {
         // Define the local instance of image store
         const imageStore = useImageStore();
-        // get the images from the image store
-        this.productImages = imageStore.getImages;
+        // Check if the image store is empty, if so fetch images then update productImages here
+        if (imageStore.getImages.length === 0){
+            await imageStore.fetchImages().then(() => {
+                // get the images from the image store
+                this.productImages = imageStore.getImages;
+            })
+        }else{
+            //If imageStore is NOT empty just get the images from the image store
+            this.productImages = imageStore.getImages;
+        }
     },
     methods: {
         // This function is used to find a product's image in our image cache. Uses the utility FindProductImage in src/util
